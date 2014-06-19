@@ -20,7 +20,7 @@
 </style>
 </head>
 <body>
-<p><p>Revised 2014-06-18 at 17:06:56 UTC</p>
+<p><p>Revised 2014-06-19 at 03:06:33 UTC</p>
 </p><h2>Tentative Issues</h2>
 <hr>
 <h3><a name="5"></a>5. [PDTS] Parent of root directory unspecified</h3>
@@ -361,6 +361,110 @@ be <tt>noexcept</tt>. I will provide unified proposed wording for these issues, 
   failure because <code>p</code> resolves to an existing directory shall not be 
   treated as an error. </p>
 
+
+
+
+
+
+<hr>
+<h3><a name="57"></a>57. [PDTS] Inappropriate use of "No diagnostic is required"</h3>
+<p><b>Section:</b> X 2.1 [fs.conform.9945] <b>Status:</b> <a href="active.html#Immediate">Tentatively Immediate</a>
+ <b>Submitter:</b> LWG/SG-3 <b>Opened:</b> 2014-02-13 <b>Last modified:</b> 2014-06-19</p>
+<p><b>View all other</b> <a href="section-index.html#.1 [fs.conform.9945">issues</a> in 2.1 [fs.conform.9945].</p>
+<p><b>View all issues with</b> <a href="status-index.html#Tentatively Immediate">Tentatively Immediate</a> status.</p>
+<p><b>Discussion:</b></p>
+<p/>§ 2.1 [fs.conform.9945] specifes "No diagnostic is required" for races. That prescription is
+used by the standard for the core language; it is not appropriate in library specifications.
+LWG/SG-3 wishes this be changed to undefined behavior.
+
+<p><i>[Beman comments: The replacment wording is similar to that used by C++14 17.6.4.10]</i></p>
+
+
+
+<p><b>Proposed resolution:</b></p>
+<p/>Change the following paragraph from § 2.1 [fs.conform.9945]
+<blockquote>
+<del>The behavior of functions described in this Technical Specification may differ
+from their specification in the presence of file system races ([fs.def.race]).
+No diagnostic is required.</del>
+<p/><ins>Behavior is undefined if calls to functions provided
+by this Technical Specification introduce a file system race (4.6 [fs.def.race]).</ins>
+</blockquote>
+
+<p/>Insert a new sub-section head before the modified paragraph:
+<blockquote>2.1 File system race behavior [fs.race.behavior]</blockquote>
+
+
+
+
+
+
+<hr>
+<h3><a name="60"></a>60. [PDTS] Incorrect <i>Throws</i> specification for <tt>absolute()</tt></h3>
+<p><b>Section:</b> X 15.1 [fs.op.absolute] <b>Status:</b> <a href="active.html#Immediate">Tentatively Immediate</a>
+ <b>Submitter:</b> Daniel Krügler <b>Opened:</b> 2014-02-28 <b>Last modified:</b> 2014-06-19</p>
+<p><b>View all issues with</b> <a href="status-index.html#Tentatively Immediate">Tentatively Immediate</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>The <i>Throws</i> element [fs.op.absolute] says:</p>
+<blockquote>
+  <p>&quot;If <code>base.is_absolute()</code> is true, throws only if memory 
+  allocation fails.&quot;</p>
+</blockquote>
+<p>We can strike:</p>
+<blockquote>
+  <p>&quot;If <code>base.is_absolute()</code> is true,&quot; and the wording will still 
+  hold. Note that:</p>
+  <ol>
+    <li>None of the involved functions has requirements.</li>
+    <li>In *every* case potentially memory allocation occurs, even for &quot;<code>return 
+    p</code>&quot;, so this allocation can fail.</li>
+  </ol>
+</blockquote>
+
+<p><i>[02-03-2014 Beman Dawes comments and provides P/R]</i></p>
+
+
+<p/>The <i>Throws</i> element should follow the same form as similar <i>Throws</i>
+elements in the TS. There isn't enough special about this function to justify special
+wording and by referencing Error reporting (7) we ensure <tt>absolute()</tt> follows
+the overall policy for handling memory allocation failures.
+
+
+
+<p><b>Proposed resolution:</b></p>
+<p><i>[Change 15.1 [fs.op.absolute]:]</i></p>
+
+
+<blockquote>
+  <p><i>Throws:</i> <del>If <code>base.is_absolute()</code> is true, throws only if 
+  memory allocation fails.</del> <ins>As specified in <a href="#Error-reporting">Error reporting (7)</a>.</ins></p>
+</blockquote>
+  
+
+
+
+
+
+<hr>
+<h3><a name="62"></a>62. Allocator requirements unspecified</h3>
+<p><b>Section:</b> X 5 Requirements [fs.req] <b>Status:</b> <a href="active.html#Immediate">Tentatively Immediate</a>
+ <b>Submitter:</b> Daniel Krügler <b>Opened:</b> 2014-05-19 <b>Last modified:</b> 2014-06-19</p>
+<p><b>View all issues with</b> <a href="status-index.html#Tentatively Immediate">Tentatively Immediate</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+  The SG3 WP refers in several places to a template parameter named "Allocator" but
+  does not impose requirements on this type.
+</p>
+
+
+<p><b>Proposed resolution:</b></p>
+<p><i>Add the following to 5 Requirements [fs.req]:</i></p>
+
+  <blockquote>
+    <p>
+      <ins>Template parameters named <code>Allocator</code> shall meet the C++ Standard's
+      library Allocator requirements (C++11 §17.6.3.5)</ins></p>
+  </blockquote>  
 
 
 
