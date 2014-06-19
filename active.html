@@ -39,7 +39,7 @@
 </tr>
 </table>
 <h1>File System TS Active Issues List (Revision D2)</h1>
-<p><p>Revised 2014-06-19 at 03:06:33 UTC</p>
+<p><p>Revised 2014-06-19 at 04:06:21 UTC</p>
 </p>
   <p>Reference ISO/IEC TS 18822</p>
   <p>Also see:</p>
@@ -1079,7 +1079,7 @@ file_status  symlink_status(error_code&amp; ec) const noexcept;</pre>
 <hr>
 <h3><a name="41"></a>41. [PDTS] <tt>directory_iterator</tt>, <tt>recursive_directory_iterator</tt>, move construct/assign should be <tt>noexcept</tt></h3>
 <p><b>Section:</b> X 13 [class.directory_iterator], X 14 [class.rec.dir.itr] <b>Status:</b> <a href="active.html#Review">Review</a>
- <b>Submitter:</b> P.J. Plauger <b>Opened:</b> 2014-01-30 <b>Last modified:</b> 2014-06-18</p>
+ <b>Submitter:</b> P.J. Plauger <b>Opened:</b> 2014-01-30 <b>Last modified:</b> 2014-06-19</p>
 <p><b>View all other</b> <a href="section-index.html#3 [class.directory_iterator">issues</a> in 13 [class.directory_iterator].</p>
 <p><b>View all issues with</b> <a href="status-index.html#Review">Review</a> status.</p>
 <p><b>Discussion:</b></p>
@@ -1174,29 +1174,56 @@ recursive_directory_iterator&amp; operator=(recursive_directory_iterator&amp;&am
   <p/>
   <i>To 14.1 recursive_directory_iterator members [rec.dir.itr.members] add:</i>
   <blockquote>
-    <pre>recursive_directory_iterator(const recursive_directory_iterator&amp; other) noexcept;
-recursive_directory_iterator(recursive_directory_iterator&amp;&amp; other) noexcept; </pre>
+    <pre>recursive_directory_iterator(const recursive_directory_iterator&amp; other) noexcept;</pre>
     <blockquote>
       <p>
-        <i>Effects:</i> Constructs an object of class <code>recursive_directory_iterator</code>
-        having the original value of <code>other</code>. In the
-        second form, <code>other</code> is left in a valid but unspecified state.
+        <i>Effects:</i> Constructs an object of class <code>recursive_directory_iterator</code>.
+      </p>
+      <p>
+        <i>Postconditions:</i> <code>this->options() == other.options() &amp;&amp; this->depth() ==
+        other.depth() &amp;&amp; this->recursion_pending() ==
+        other.recursion_pending()</code>.
+      </p>
+    </blockquote>
+
+    <pre>recursive_directory_iterator(recursive_directory_iterator&amp;&amp; other) noexcept;</pre>
+    <blockquote>
+      <p>
+        <i>Effects:</i> Constructs an object of class <code>recursive_directory_iterator</code>.
+      </p>
+      <p>
+        <i>Postconditions:</i> <code>this->options()</code>, <code>this->depth()</code>, and
+        <code>this->recursion_pending()</code>, respectively, return the values that
+        <code>other.options()</code>, <code>other.depth()</code>, and <code>other.recursion_pending()</code>,
+        respectively, had before the function call. <code>other</code> is in a valid but unspecified state.
+      </p>
+    </blockquote>
+
+    <pre>recursive_directory_iterator&amp; operator=(const recursive_directory_iterator&amp; other);</pre>
+    <blockquote>
+      <p>
+      <i>Postconditions:</i> <code>
+        this->options() == other.options() &amp;&amp; this->depth() ==
+        other.depth() &amp;&amp; this->recursion_pending() ==
+        other.recursion_pending()
+      </code>.
       </p>
 
-    </blockquote>
-    <pre>recursive_directory_iterator&amp; operator=(const recursive_directory_iterator&amp; other);
-recursive_directory_iterator&amp; operator=(recursive_directory_iterator&amp;&amp; other) noexcept;</pre>
-    <blockquote>
-      <p>
-        <i>Effects:</i> If <code>*this</code> and <code>other</code> are not the same object, <code>*this</code>
-        is set equal to the original value of <code>other</code>. In the second form, <code>other</code> is
-        left in a valid but unspecified state.
-      </p>
-      <p>
-        If <code>*this</code> and <code>other</code> are the same object, the member has no effect.
-      </p>
       <p/><i>Returns:</i>
       <code>*this</code>.
+
+    </blockquote>
+
+    <pre>recursive_directory_iterator&amp; operator=(recursive_directory_iterator&amp;&amp; other) noexcept;</pre>
+    <blockquote>
+      <p>
+        <i>Postconditions:</i>
+        <code>this->options()</code>, <code>this->depth()</code>, and
+        <code>this->recursion_pending()</code>, respectively, return the values that
+        <code>other.options()</code>, <code>other.depth()</code>, and <code>other.recursion_pending()</code>,
+        respectively, had before the function call. <code>other</code> is in a valid but unspecified state.
+      </p>
+      <p/><i>Returns:</i> <code>*this</code>.
 
     </blockquote>
   </blockquote>
@@ -1371,7 +1398,7 @@ See <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3944.html#
 <hr>
 <h3><a name="53"></a>53. [PDTS] <tt>directory_entry</tt> multithreading concerns</h3>
 <p><b>Section:</b> X 12 [class.directory_entry] <b>Status:</b> <a href="active.html#Review">Review</a>
- <b>Submitter:</b> Stephan T. Lavavej <b>Opened:</b> 2014-02-03 <b>Last modified:</b> 2014-06-18</p>
+ <b>Submitter:</b> Stephan T. Lavavej <b>Opened:</b> 2014-02-03 <b>Last modified:</b> 2014-06-19</p>
 <p><b>View other</b> <a href="open-index.html#2 [class.directory_entry">active issues</a> in 12 [class.directory_entry].</p>
 <p><b>View all other</b> <a href="section-index.html#2 [class.directory_entry">issues</a> in 12 [class.directory_entry].</p>
 <p><b>View all issues with</b> <a href="status-index.html#Review">Review</a> status.</p>
@@ -1412,18 +1439,18 @@ very very nice to have a note about this.</p>
     directory_entry(directory_entry&amp;&amp;) noexcept = default;
     <ins>explicit directory_entry(const path&amp; p);</ins>
     <del>explicit</del> directory_entry(const path&amp; p, file_status st<del>=file_status()</del>,
-    file_status symlink_st<del>=file_status()</del>);
+      file_status symlink_st<del>=file_status()</del>);
     ~directory_entry();
 
     // <a href="#directory_entry-modifiers">modifiers</a>
     directory_entry&amp; operator=(const directory_entry&amp;) = default;
     directory_entry&amp; operator=(directory_entry&amp;&amp;) noexcept = default;
     <ins>void assign(const path&amp; p);</ins>
-    void assign(const path&amp; p, file_status st<del>=file_status(),</del>
-    file_status symlink_st<del>=file_status()</del>);
+    void assign(const path&amp; p, file_status st<del>=file_status()</del>,
+      file_status symlink_st<del>=file_status()</del>);
     <ins>void replace_filename(const path&amp; p);</ins>
-    void replace_filename(const path&amp; p, file_status st<del>=file_status(),</del>
-    file_status symlink_st<del>=file_status()</del>);
+    void replace_filename(const path&amp; p, file_status st<del>=file_status()</del>,
+      file_status symlink_st<del>=file_status()</del>);
 
     // <a href="#directory_entry-observers">observers</a>
     const path&amp;  path() const noexcept;
